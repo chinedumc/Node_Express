@@ -5,8 +5,8 @@ const emitter = new EventEmitter()
 const event = require('events')
 const myEmitter = new event.EventEmitter()
 
-myEmitter.on('readFile', () => {
-  console.log('\nRead Event Occurred!');
+myEmitter.on('readFile', (bod) => {
+  console.log('\nRead Event Occurred!', bod);
 })
 
 //Register a listener
@@ -16,3 +16,4 @@ emitter.on('messageLogged', (arg) => {
 
 // Raise/Emit an event
 emitter.emit('messageLogged', {id: '1', url: 'http://'})
+myEmitter.emit('readFile', {id: '2', url: 'http://'})
