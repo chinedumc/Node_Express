@@ -1,6 +1,6 @@
 const EventEmitter = require('events')
 
-var url = 'http://mylogger.io/log'
+const url = 'http://mylogger.io/log'
 
 class Logger extends EventEmitter {
   flog(message) {
@@ -8,7 +8,7 @@ class Logger extends EventEmitter {
     console.log(message)
 
     //Raise an event
-    this.emit('messageLogged', {id: 1, url: 'http://'})
+    this.emit('messageLogged', {id: 1, url})
   }
 }
 
