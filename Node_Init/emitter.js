@@ -17,3 +17,4 @@ emitter.on('messageLogged', (arg) => {
 // Raise/Emit an event
 emitter.emit('messageLogged', {id: '1', url: 'http://'})
 myEmitter.emit('readFile', {id: '2', url: 'http://'})
+emitter.emit('messageLogged', 'hello')
