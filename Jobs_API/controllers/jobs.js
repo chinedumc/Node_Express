@@ -1,28 +1,64 @@
 const Job = require("../models/Jobs");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, NotFoundError } = require("../errors");
+const Jobs = require("../models/Jobs");
 
 const getAllJobs = async (req, res) => {
-	const jobs = await Job.find({ createdBy: req.user.userid }).sort("createdAt");
+	const jobs = await Jobs.find({ createdBy: req.user.userid }).sort("createdAt");
 	res.status(StatusCodes.OK).json({ jobs, count: jobs.length });
 };
 
 const getJob = async (req, res) => {
-	res.send("Get job");
+	const {
+		user: { userId },
+		params: { id: jobId },
+	} = req;
+	const job = await Jobs.findOne({ _id: jobId, createdBy: userId });
+	if (!job) {
+		throw new NotFoundError(`No job with id ${jobId} found`);
+	}
+	res.status(StatusCodes.OK).json({ job });
 };
 
 const createJob = async (req, res) => {
 	req.body.createdBy = req.user.userId;
-	const job = await Job.create(req.body);
+	const job = await Jobs.create(req.body);
 	res.status(StatusCodes.CREATED).json({ job });
 };
 
 const updateJob = async (req, res) => {
-	res.send("update job");
+	const {
+		body: { company, position },
+		user: { userId },
+		params: { id: jobId },
+	} = req;
+
+	if (company === "" || position === "") {
+		throw new BadRequestError("Company or Position cannot be empty");
+	}
+	const job = await Jobs.findOneAndUpdate(
+		{ _id: jobId, createdBy: userId },
+		req.body,
+		{ new: true, runValidators: true }
+	);
+	if (!job) {
+		throw new NotFoundError(`No job with id ${jobId} found`);
+	}
+	res.status(StatusCodes.OK).json({ job });
 };
 
 const deleteJob = async (req, res) => {
-	res.send("delete job");
+	const {
+		user: { userId },
+		params: { id: jobId },
+	} = req;
+
+	const job = Jobs.findByIdAndDelete({ _id: jobId, createdBy: userId });
+	if (!job) {
+		throw new NotFoundError(`No job with id ${jobId} found`);
+	}
+
+	res.status(StatusCodes.OK).send()
 };
 
 module.exports = {
