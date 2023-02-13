@@ -12,8 +12,8 @@ const JobsSchema = new mongoose.Schema(
 			required: [true, "Please provide position"],
 			maxlength: 50,
 		},
-		interview: {
-			type: Boolean,
+		status: {
+			type: String,
 			// required:[true,'Please provide interview status']
 			enum: ["interview", "declined", "pending"],
 			default: "pending",
@@ -27,4 +27,4 @@ const JobsSchema = new mongoose.Schema(
 	{ timestamps: true }
 );
 
-module.exports = mongoose.model("Jobs", JobsSchema);
+module.exports = mongoose.model("Job", JobsSchema);
