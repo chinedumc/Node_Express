@@ -1,10 +1,21 @@
 require('dotenv').config()
+require('express-async-errors')
 const express = require("express");
 const app = express();
+const morgan = require('morgan')
 
 const connectDB = require('./db/connect')
 
+//middleware
+const notFoundMiddleware = require('./middleware/not-Found')
+const errorHandlerMiddleware=require('./middleware/error-handler')
+
+
+app.use(morgan('tiny'))
 app.use(express.json())
+
+app.use(notFoundMiddleware)
+app.use(errorHandlerMiddleware)
 
 app.get('/',(req,res)=>{
   res.send('E-COMM API')
