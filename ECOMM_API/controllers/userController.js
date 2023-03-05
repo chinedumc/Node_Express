@@ -21,6 +21,8 @@ const getSingleUser = async (req, res) => {
 const ShowCurentUser = async (req, res) => {
 	res.status(StatusCodes.OK).json({ user: req.user });
 };
+
+// Update user with user.save()
 const updateUser = async (req, res) => {
 	const { name, email } = req.body;
 
@@ -29,13 +31,13 @@ const updateUser = async (req, res) => {
 			"Please enter valid email and password"
 		);
 	}
+	const user = await User.findOne({ _id: req.user.userId });
 
-	// const user = createTokenUser(user)
-	const user = await User.findOneAndUpdate(
-		{ _id: req.user.userId },
-		{ name, email },
-		{ new: true, runValidators: true }
-	);
+	user.email = email;
+	user.name = name;
+
+	await user.save();
+
 	const tokenUser = createTokenUser(user);
 	attachCookiesToResponse({ res, user: tokenUser });
 	res.status(StatusCodes.OK).json({ user: tokenUser });
@@ -67,3 +69,24 @@ module.exports = {
 	updateUser,
 	updateUserPassword,
 };
+
+// Update user with findOneAndUpdate
+// const updateUser = async (req, res) => {
+// 	const { name, email } = req.body;
+
+// 	if (!name || !email) {
+// 		throw new CustomError.BadRequestError(
+// 			"Please enter valid email and password"
+// 		);
+// 	}
+
+// 	// const user = createTokenUser(user)
+// 	const user = await User.findOneAndUpdate(
+// 		{ _id: req.user.userId },
+// 		{ name, email },
+// 		{ new: true, runValidators: true }
+// 	);
+// 	const tokenUser = createTokenUser(user);
+// 	attachCookiesToResponse({ res, user: tokenUser });
+// 	res.status(StatusCodes.OK).json({ user: tokenUser });
+// };
