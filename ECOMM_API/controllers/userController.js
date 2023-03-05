@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const { StatusCodes } = require("http-status-codes");
 const CustomError = require("../errors");
+const { createTokenUser, attachCookiesToResponse } = require("../utils");
 
 // getAllUsers, getSingleUser, ShowCurentUser, updateUser, updateUserPassword
 
@@ -21,7 +22,23 @@ const ShowCurentUser = async (req, res) => {
 	res.status(StatusCodes.OK).json({ user: req.user });
 };
 const updateUser = async (req, res) => {
-	res.send("update user route");
+	const { name, email } = req.body;
+
+	if (!name || !email) {
+		throw new CustomError.BadRequestError(
+			"Please enter valid email and password"
+		);
+	}
+
+	// const user = createTokenUser(user)
+	const user = await User.findOneAndUpdate(
+		{ _id: req.user.userId },
+		{ name, email },
+		{ new: true, runValidators: true }
+	);
+	const tokenUser = createTokenUser(user);
+	attachCookiesToResponse({ res, user: tokenUser });
+	res.status(StatusCodes.OK).json({ user: tokenUser });
 };
 const updateUserPassword = async (req, res) => {
 	const { oldPassword, newPassword } = req.body;
@@ -31,16 +48,16 @@ const updateUserPassword = async (req, res) => {
 		);
 	}
 
-	const user = await User.findOne({ _id: req.user.userId })
+	const user = await User.findOne({ _id: req.user.userId });
 
-  const isPasswordCorrect=await user.comparePasswords(oldPassword)
-  if(!isPasswordCorrect){
-    throw new CustomError.UnauthenticatedError('Invalid Credentials')
-  }
-  user.password=newPassword
+	const isPasswordCorrect = await user.comparePasswords(oldPassword);
+	if (!isPasswordCorrect) {
+		throw new CustomError.UnauthenticatedError("Invalid Credentials");
+	}
+	user.password = newPassword;
 
-  await user.save()
-  res.status(StatusCodes.OK).json({msg:'Sucess! Password updated'})
+	await user.save();
+	res.status(StatusCodes.OK).json({ msg: "Sucess! Password updated" });
 };
 
 module.exports = {
