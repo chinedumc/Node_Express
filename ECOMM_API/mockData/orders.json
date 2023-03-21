@@ -1,0 +1,35 @@
+[
+	{
+		"tax": 399,
+		"shippingFee": 499,
+		"items": [
+			{
+				"name": "accent chair",
+				"price": 2599,
+				"image": "https://dl.airtable.com/.attachmentThumbnails/e8bc3791196535af65f40e36993b9e1f/438bd160",
+				"amount": 34,
+				"product": "640a68c5e4969b8c3dece143"
+			}
+		]
+	},
+	{
+		"tax": 499,
+		"shippingFee": 799,
+		"items": [
+			{
+				"name": "bed",
+				"price": 2699,
+				"image": "https://dl.airtable.com/.attachmentThumbnails/e8bc3791196535af65f40e36993b9e1f/438bd160",
+				"amount": 3,
+				"product": "640bb7c006d1bc552592a03d"
+			},
+			{
+				"name": "chair",
+				"price": 2999,
+				"image": "https://dl.airtable.com/.attachmentThumbnails/e8bc3791196535af65f40e36993b9e1f/438bd160",
+				"amount": 2,
+				"product": "640bb8d492d09f77f37584fc"
+			}
+		]
+	}
+]
