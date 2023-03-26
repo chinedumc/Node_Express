@@ -6,7 +6,7 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
 
-const rateLimiter = require("express-rate-limiter");
+const rateLimiter = require("express-rate-limit");
 const helmet = require("helmet");
 const xss = require("xss-clean");
 const cors = require("cors");
